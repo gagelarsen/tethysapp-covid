@@ -1,0 +1,76 @@
+/* Add padding to account for missing hamburger menu */
+#app-header .tethys-app-header #nav-title-wrapper {
+    margin-left: 15px;
+}
+
+/* Remove padding on bottom where app-actions section used to be */
+#app-content-wrapper #app-content {
+    padding-bottom: 0;
+}
+
+#app-content {
+    background: black;
+}
+
+.dashboard-cell {
+    background-color: #303030;
+    min-height: 50px;
+    border: 1px solid #363636;
+    text-align: center;
+    margin: 5px;
+}
+
+.dashboard-cell-title {
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 0;
+}
+
+.total {
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+.total.default, .feature-list-item .default {
+    color: white;
+}
+
+.total.danger, .feature-list-item .danger {
+    color: #e60000;
+}
+
+.total.success, .feature-list-item .success {
+    color: #70a800;
+}
+
+.feature-list {
+    list-item-type: none
+}
+
+.feature-list-item {
+    color: white;
+    text-align: left;
+    border-bottom: 1px solid grey;
+    padding: 5px;
+    font-size: 14px;
+}
+
+.feature-list-item-number {
+    float: right;
+}
+
+.dashboard-map {
+    height: 500px;
+    width: 100%;
+}
+
+#updated-date-format {
+    color: white;
+}
+
+#updated-date {
+    color: white;
+    font-weight: 700;
+}

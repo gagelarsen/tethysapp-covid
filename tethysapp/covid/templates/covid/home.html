@@ -1,0 +1,150 @@
+{% extends "covid/base.html" %}
+{% load tethys_gizmos %}
+
+{% block global_scripts %}
+  {{ block.super }}
+  <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/dark/main.css" />
+  <script src="https://js.arcgis.com/4.14/"></script>
+{% endblock %}
+
+{% block header_buttons %}
+  <div class="header-button glyphicon-button" data-toggle="tooltip" data-placement="bottom" title="Help">
+    <a data-toggle="modal" data-target="#help-modal"><span class="glyphicon glyphicon-question-sign"></span></a>
+  </div>
+{% endblock %}
+
+{% block app_content %}
+  <div id="dashboard" class="container-fluid">
+    <div class="row">
+      <div class="col-md-2">
+        <div class="row">
+          <div class="col-md-12">
+            <div id="total-confirmed" class="dashboard-cell">
+              <p class="dashboard-cell-title">Total Confirmed</p>
+              <p class="total danger">{{ total_confirmed }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div id="cases-by-region" class="dashboard-cell">
+              <p class="dashboard-cell-title">Confirmed Cases by Country/Region</p>
+              <div class="feature-list">
+                {% for count, region in conf_by_region %}
+                <h5 class="feature-list-item">
+                  <span>{{ region }}</span>
+                  <span class="feature-list-item-number danger">{{ count }}</span>
+                </h5>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div id="updated-note" class="dashboard-cell">
+              <p id="updated-date-format">Last Updated at (MMM. DD, YYYY)</p>
+              <p class="default" id="updated-date">{{ last_updated }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-md-12">
+            <div id="outbreak-map" class="dashboard-cell">
+              <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Cumulative Confirmed Cases</a></li>
+                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Existing Cases</a></li>
+              </ul>
+              <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="home">
+                  <div id="cumulative-map" class="dashboard-map"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="profile">
+                  <div id="current-map" class="dashboard-map"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div id="info-box" class="dashboard-cell"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row">
+          <div class="col-md-6">
+            <div id="deaths" class="dashboard-cell">
+              <p class="dashboard-cell-title">Total Deaths</p>
+              <p class="total default">{{ total_deaths }}</p>
+              <div class="feature-list">
+                {% for count, region in death_by_region %}
+                <h5 class="feature-list-item">
+                  <span>{{ region }}</span>
+                  <span class="feature-list-item-number default">{{ count }}</span>
+                </h5>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div id="recoveries" class="dashboard-cell">
+              <p class="dashboard-cell-title">Total Recovered</p>
+              <p class="total success">{{ total_recovered }}</p>
+              <div class="feature-list">
+                {% for count, region in recov_by_region %}
+                <h5 class="feature-list-item">
+                  <span>{{ region }}</span>
+                  <span class="feature-list-item-number success">{{ count }}</span>
+                </h5>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div id="outbreak-chart" class="dashboard-cell">
+              {% gizmo plot_view %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{# Use the after_app_content block for modals #}
+{% block after_app_content %}
+  <!-- Example Modal -->
+  <div class="modal fade" id="help-modal" tabindex="-1" role="dialog" aria-labelledby="help-modal-label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h5 class="modal-title" id="help-modal-label">Example Modal</h5>
+        </div>
+        <div class="modal-body">
+          <p>You can add custom buttons to the app header using the <code>header_buttons</code> block. Use anchor/link tags for the button and wrap it in a div with the class <code>header-button</code>. For buttons with the gliphyicons, add the <code>glyphicon-button</code> class as well.</p>
+          <p>Ever have trouble using a modal in a Tethys app? Use the <code>after_app_content</code> block for modal content to allow them to function properly. See: <a href="https://getbootstrap.com/javascript/#modals">Bootstrap Modals</a></p>
+          <p>Add tooltips to any element by adding the <code>data-toggle</code>, <code>data-placement</code>, and <code>title</code> attributes to the button. See: <a href="https://getbootstrap.com/javascript/#tooltips">Bootstrap Tooltips</a></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block app_actions %}
+  {% gizmo save_button %}
+  {% gizmo edit_button %}
+  {% gizmo remove_button %}
+  {% gizmo previous_button %}
+  {% gizmo next_button %}
+{% endblock %}
